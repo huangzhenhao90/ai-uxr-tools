@@ -1,15 +1,53 @@
 'use client';
-import {useState,useMemo} from 'react';
-import Link from 'next/link';import {tools,CATS,ZH} from '../lib';
+import {useState,useMemo,useEffect,Suspense} from 'react';
+import {useSearchParams} from 'next/navigation';
+import Link from 'next/link';import Icon from './Icon';import Badges from './Badges';
+import {tools,CATS,CAT_SLUG,catCount,known} from '../lib';
+const SLUG_CAT=Object.fromEntries(Object.entries(CAT_SLUG).map(([c,s])=>[s,c]));
+const FLAGS=[['zh','支持中文',t=>t.chinese_support==='yes'||t.chinese_support==='partial'],['cn','国内可用',t=>t.china_accessible==='yes'],['free','有免费版',t=>t.free_tier==='yes'||t.free_tier==='partial']];
+const SORTS={default:'信息完整优先',new:'最近收录',name:'名称 A–Z'};
+const EMPTY={cat:'',q:'',zh:false,cn:false,free:false,sort:'default'};
+const parse=s=>({cat:SLUG_CAT[s.get('cat')]?s.get('cat'):'',q:s.get('q')||'',zh:s.has('zh'),cn:s.has('cn'),free:s.has('free'),sort:SORTS[s.get('sort')]?s.get('sort'):'default'});
+const toQuery=f=>{const s=new URLSearchParams();if(f.cat)s.set('cat',f.cat);if(f.q)s.set('q',f.q);for(const k of ['zh','cn','free'])if(f[k])s.set(k,'1');if(f.sort!=='default')s.set('sort',f.sort);const q=s.toString();return q?'?'+q:''};
+
+// 读取 URL 参数（侧栏分类链接、分享链接、前进后退）
+function Sync({f,set}){const sp=useSearchParams();useEffect(()=>{const n=parse(sp);if(toQuery(n)!==toQuery(f))set(n)},[sp]);return null}
+
+function Hl({text,q}){if(!q)return text;const i=text.toLowerCase().indexOf(q.toLowerCase());if(i<0)return text;return <>{text.slice(0,i)}<mark>{text.slice(i,i+q.length)}</mark>{text.slice(i+q.length)}</>}
+
 export default function Home(){
- const [q,setQ]=useState('');const [cat,setCat]=useState('');const [zh,setZh]=useState('');const [cn,setCn]=useState('');const [free,setFree]=useState(false);
- const list=useMemo(()=>tools.filter(t=>(!cat||t.category===cat)&&(!zh||t.chinese_support===zh)&&(!cn||t.china_accessible===cn)&&(!free||t.free_tier==='yes')&&(!q||(t.name+t.description+t.summary+t.category).toLowerCase().includes(q.toLowerCase()))),[q,cat,zh,cn,free]);
+ const [f,setF]=useState(EMPTY);
+ // 用户操作时同步写入 URL，便于刷新和分享
+ const go=n=>{setF(n);const q=toQuery(n);if(q!==location.search)history.replaceState(history.state,'',location.pathname+q)};
+ const up=p=>go({...f,...p});
+ const cat=SLUG_CAT[f.cat]||'';
+ const base=useMemo(()=>{const q=f.q.trim().toLowerCase();return tools.filter(t=>FLAGS.every(([k,,fn])=>!f[k]||fn(t))&&(!q||[t.name,t.summary,t.intro,t.use_case,t.category].join(' ').toLowerCase().includes(q)))},[f.q,f.zh,f.cn,f.free]);
+ const list=useMemo(()=>{const l=base.filter(t=>!cat||t.category===cat);
+  if(f.sort==='name')return [...l].sort((a,b)=>a.name.localeCompare(b.name,'zh-CN'));
+  if(f.sort==='new')return [...l].sort((a,b)=>b.added.localeCompare(a.added));
+  return [...l].sort((a,b)=>known(b)-known(a))},[base,cat,f.sort]);
+ const active=f.cat||f.q||f.zh||f.cn||f.free;
+ const q=f.q.trim();
  return <>
- <div className="chips">{['',...CATS].map(c=><button key={c} className={'chip'+(cat===c?' on':'')} onClick={()=>setCat(c)}>{c||'全部'}</button>)}</div>
- <div className="bar"><input placeholder="搜索工具名或用途，如：转写、访谈、问卷" value={q} onChange={e=>setQ(e.target.value)}/>
- <select value={zh} onChange={e=>setZh(e.target.value)}><option value="">中文支持：不限</option><option value="yes">支持中文</option><option value="partial">部分支持</option></select>
- <select value={cn} onChange={e=>setCn(e.target.value)}><option value="">国内可用：不限</option><option value="yes">国内可用</option><option value="no">国内不可直接用</option></select>
- <label className="chip" style={{display:'flex',alignItems:'center',gap:4}}><input type="checkbox" checked={free} onChange={e=>setFree(e.target.checked)}/>有免费版</label></div>
- <p className="muted">共 {list.length} 个工具</p>
- <div className="grid">{list.map(t=><Link key={t.id} className="card" href={`/tools/${t.id}/`}><h3>{t.name}</h3><p className="sub">{t.summary}</p><span className="tag b">{t.category}</span>
- <span className="tag">中文：{ZH[t.chinese_support]}</span>{t.china_accessible==='yes'&&<span className="tag g">国内可用</span>}{t.free_tier==='yes'&&<span className="tag g">有免费版</span>}</Link>)}</div></>}
+ <Suspense fallback={null}><Sync f={f} set={setF}/></Suspense>
+ <div className="tabs-wrap"><div className="pill-tabs" role="group" aria-label="按分类筛选">
+  {[['',`全部`,base.length],...CATS.map(c=>[CAT_SLUG[c],c,base.filter(t=>t.category===c).length])].map(([s,l,n])=><button key={s} type="button" className={'pill-tabs__tab'+(n?'':' is-empty')} aria-pressed={f.cat===s} onClick={()=>up({cat:s})}>{l}<span className="pill-tabs__n">{n}</span></button>)}
+ </div></div>
+ <div className="filter-bar">
+  <div className="chip-row" role="group" aria-label="条件筛选">{FLAGS.map(([k,l])=><button key={k} type="button" className="chip" aria-pressed={f[k]} onClick={()=>up({[k]:!f[k]})}>{f[k]&&<span aria-hidden="true">✓</span>}{l}</button>)}</div>
+  <div className="filter-bar__tools">
+   <select className="select" aria-label="排序" value={f.sort} onChange={e=>up({sort:e.target.value})}>{Object.entries(SORTS).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select>
+   <label className="search-box"><Icon n="search" s={15}/><span className="sr-only">搜索工具</span><input type="search" placeholder="搜索工具或用途：转写、访谈…" value={f.q} onChange={e=>up({q:e.target.value})}/>{f.q&&<button type="button" className="search-box__clear" aria-label="清空搜索" onClick={()=>up({q:''})}><Icon n="x" s={12}/></button>}</label>
+  </div>
+ </div>
+ <div className="result-line" aria-live="polite"><span>{cat?`${cat} · `:''}显示 {list.length} 个工具</span>{active&&<button type="button" className="link-button" onClick={()=>go(EMPTY)}>清除筛选</button>}</div>
+ {list.length?<div className="grid-cards">{list.map(t=><article key={t.id} className="card card--item">
+  <div className="card__head"><span className="badge badge--accent">{t.category}</span><a className="card__origin" href={t.url} target="_blank" rel="nofollow noopener" aria-label={`${t.name} 官网（新窗口）`}>官网<Icon n="external" s={12}/></a></div>
+  <h2 className="card__title"><Link className="card__link" href={`/tools/${t.id}/`}><Hl text={t.name} q={q}/></Link></h2>
+  <p className="card__summary"><Hl text={t.summary} q={q}/></p>
+  <div className="card__badges"><Badges t={t}/></div>
+  <p className="card__reason"><span>用研场景：{t.use_case}</span></p>
+ </article>)}</div>
+ :<div className="empty">没有符合条件的工具。<br/>试试减少筛选条件，或者 <button type="button" className="link-button" onClick={()=>go(EMPTY)}>清除全部筛选</button>。<br/>知道一个应该收录的工具？<Link className="text-link" href="/submit/">推荐给我们</Link></div>}
+ <p className="legend">卡片只显示已经核实的信息；中文支持、国内可用性等尚未确认的字段在详情页标为“待核实”。默认排序把信息更完整的工具排在前面。</p>
+ </>}
