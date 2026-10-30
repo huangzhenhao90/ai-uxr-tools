@@ -1,0 +1,21 @@
+const P={
+ home:<path d="M13 2.5L4.5 13.5H11l-1 8L19.5 10.5H13z"/>,
+ transcribe:<path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/>,
+ 'ai-interview':<path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5z"/>,
+ synthetic:<><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16.5 14.5c2.2.2 3.6 1.6 4 4"/></>,
+ survey:<><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 14h7M8.5 18h4"/></>,
+ repository:<><rect x="3.5" y="4.5" width="17" height="4.5" rx="1"/><path d="M5 9v9.5a1 1 0 001 1h12a1 1 0 001-1V9M10 13h4"/></>,
+ usability:<path d="M6 3.5l12 7.5-5.5 1.3L10 18z M12.6 12.4l4.4 6.1"/>,
+ llm:<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>,
+ plus:<><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></>,
+ handshake:<path d="M12 20s-7-4.4-7-9.5A4 4 0 0112 8a4 4 0 017 2.5C19 15.6 12 20 12 20z"/>,
+ info:<><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></>,
+ flame:<path d="M12 3c1 3 4.5 4.6 4.5 8.6A4.5 4.5 0 0112 16a4.5 4.5 0 01-4.5-4.4c0-2 1-3.4 2-4.5.1 1.7.9 2.7 1.8 3C10.9 7.7 11.3 5 12 3zM7 20h10"/>,
+ search:<><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></>,
+ external:<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>,
+ x:<path d="M7 7l10 10M17 7L7 17"/>,
+ moon:<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>,
+ monitor:<><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></>,
+ sun:<><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></>,
+};
+export default function Icon({n,s=17}){return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{P[n]}</svg>}
