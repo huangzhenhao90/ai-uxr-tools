@@ -74,6 +74,15 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .crumbs{margin-bottom:14px;font-size:13px;color:var(--ink-4)}.crumbs a{color:var(--accent)}.crumbs a:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* 筛选 */
+.region-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.region-switch__opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);text-align:left;box-shadow:var(--shadow-card);transition:border-color .15s,background-color .15s}
+.region-switch__opt:hover{border-color:var(--line-strong)}
+.region-switch__opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-softer);box-shadow:inset 0 0 0 1px var(--accent)}
+.region-switch__name{display:flex;align-items:baseline;gap:6px;font-size:15px;font-weight:650;color:var(--ink)}
+.region-switch__name .num{font-size:12.5px;font-weight:500;color:var(--ink-4)}
+.region-switch__opt[aria-pressed="true"] .region-switch__name{color:var(--accent)}
+.region-switch__desc{font-size:12.5px;line-height:1.5;color:var(--ink-4)}
+@media(max-width:600px){.region-switch{gap:6px}.region-switch__opt{padding:8px 10px}.region-switch__desc{display:none}}
 .pill-tabs{display:flex;gap:2px;max-width:100%;width:max-content;padding:4px;overflow-x:auto;border:1px solid var(--line-soft);border-radius:999px;background:var(--bg-sunk);scrollbar-width:none}
 .pill-tabs::-webkit-scrollbar{display:none}
 .pill-tabs__tab{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;font-size:14px;color:var(--ink-3);white-space:nowrap;transition:color .15s,background-color .15s}
@@ -159,6 +168,7 @@ a.badge--accent:hover{background:var(--accent);color:var(--surface)}
 .fact__v.is-yes::before{background:var(--good)}.fact__v.is-no::before{background:var(--amber-ink)}.fact__v.is-partial::before{background:var(--accent)}
 .fact__v.is-unknown{color:var(--ink-4);font-weight:500}
 .fact--wide{grid-column:1/-1}
+.fact__note{margin-top:6px;font-size:12.5px;line-height:1.6;color:var(--ink-3)}.fact__note a{color:var(--accent)}
 .fact__price{margin-top:4px;font-size:14.5px;line-height:1.7;color:var(--ink)}
 .fact__meta{margin-top:6px;font-size:12.5px;color:var(--ink-4)}.fact__meta a{color:var(--accent)}
 .grid-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:10px}

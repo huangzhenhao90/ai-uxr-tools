@@ -6,6 +6,8 @@ const P={
  survey:<><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 10h7M8.5 14h7M8.5 18h4"/></>,
  repository:<><rect x="3.5" y="4.5" width="17" height="4.5" rx="1"/><path d="M5 9v9.5a1 1 0 001 1h12a1 1 0 001-1V9M10 13h4"/></>,
  usability:<path d="M6 3.5l12 7.5-5.5 1.3L10 18z M12.6 12.4l4.4 6.1"/>,
+ cn:<><path d="M5 21V4M5 4.5h12.5l-2.5 4 2.5 4H5"/></>,
+ globe:<><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.6 3.5 5.4 3.5 8.5s-1.1 5.9-3.5 8.5c-2.4-2.6-3.5-5.4-3.5-8.5s1.1-5.9 3.5-8.5z"/></>,
  plus:<><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></>,
  handshake:<path d="M12 20s-7-4.4-7-9.5A4 4 0 0112 8a4 4 0 017 2.5C19 15.6 12 20 12 20z"/>,
  info:<><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></>,
