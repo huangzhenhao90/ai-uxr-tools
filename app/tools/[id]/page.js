@@ -7,7 +7,7 @@ export default async function P({params}){const {id}=await params;const t=tools.
  const slug=CAT_SLUG[t.category];
  const related=tools.filter(x=>x.category===t.category&&x.id!==t.id).sort((a,b)=>known(b)-known(a)).slice(0,4);
  const host=t.url.replace(/^https?:\/\/(www\.)?/,'').replace(/\/.*$/,'');
- return <div className="reading">
+ return <div>
  <nav className="crumbs" aria-label="面包屑"><Link href="/">工具榜</Link> / <Link href={`/?region=${t.region}`}>{REGIONS[t.region]}</Link> / <Link href={`/?cat=${slug}`}>{t.category}</Link></nav>
  <header className="hero-card">
   <div className="hero-card__kicker"><span className="badge badge--accent">{t.category}</span><span className="badge">{REGIONS[t.region]}</span><Badges t={t}/></div>

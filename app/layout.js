@@ -1,4 +1,4 @@
-import './globals.css';import Link from 'next/link';import {BASE,UXHOT} from '../lib';import Baidu from '../components/Baidu';import Nav from '../components/Nav';import ThemeSwitch from '../components/ThemeSwitch';
+import './globals.css';import Link from 'next/link';import {BASE} from '../lib';import Baidu from '../components/Baidu';import Nav from '../components/Nav';import ThemeSwitch from '../components/ThemeSwitch';
 const DESC='中文用研人的 AI 用户研究工具目录：每个工具都有介绍和用研场景，标注中文支持、国内可用性、免费版与价格来源。真知浩见出品。';
 export const metadata={title:'AI用研工具榜 · 中文用研人的 AI 工具榜',description:DESC,openGraph:{title:'AI用研工具榜 · 中文用研人的 AI 工具榜',description:DESC,type:'website',locale:'zh_CN',siteName:'AI用研工具榜'}};
 export const viewport={width:'device-width',initialScale:1,themeColor:[{media:'(prefers-color-scheme: light)',color:'#faf9f6'},{media:'(prefers-color-scheme: dark)',color:'#13191c'}]};
@@ -14,5 +14,5 @@ export default function L({children}){return <html lang="zh-CN" suppressHydratio
 <div className="shell__main">
 <header className="phonebar"><div className="phonebar__top"><Link className="phonebar__brand" href="/" aria-label="AI用研工具榜 首页"><span className="wordmark wordmark--small"><Mark s={26}/><span><b>AI用研</b><span>工具榜</span></span></span><Byline sm/></Link><ThemeSwitch compact/></div><Nav phone/></header>
 <main className="main">{children}</main>
-<footer className="site-footer"><span>© 2026 AI用研工具榜 · 主理人 真浩 · 真知浩见出品</span><a href={UXHOT}>姊妹站 URhot · AI 用研热点</a><span>工具信息人工整理自各官网，价格以官网为准；“待核实”表示尚未确认。</span></footer>
+<footer className="site-footer"><span>© 2026 AI用研工具榜 · 真知浩见出品</span></footer>
 </div></div><Baidu/></body></html>}
